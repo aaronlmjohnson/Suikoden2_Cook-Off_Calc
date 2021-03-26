@@ -1,4 +1,4 @@
-fetch('json/dishes.json')
+fetch('https://suikoden-2-cook-off-calculator.s3.us-east-2.amazonaws.com/json/dishes.json')
 .then(data=> data.json())
 .then(data => {
     const characterGrid = document.getElementById("characters");
