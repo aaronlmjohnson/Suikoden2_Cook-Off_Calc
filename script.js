@@ -19,7 +19,7 @@ fetch('json/dishes.json')
         
         cell.onclick = ()=>{
             selectCharacter(cell);
-            selectedCharacters = [...document.getElementsByClassName("selected")].map(element => element.innerText); 
+            selectedCharacters = fixSpecialNames([...document.getElementsByClassName("selected")].map(element => element.innerText)); 
         };
         fillCharacterCell(cell, character);
     });
@@ -165,6 +165,8 @@ fetch('json/dishes.json')
 
     function getTastes(selectedChars, allChars){
         let tastes = [];
+        
+        
         for(char in allChars)
             if(selectedChars.includes(char))
                 tastes.push(allChars[char]);
@@ -172,8 +174,21 @@ fetch('json/dishes.json')
         return [...new Set(tastes)];
     }
 
+    function fixSpecialNames(selectedChars){
+        fixedName = [];
+        selectedChars.forEach(name => {
+            if(name == "L.C.Chan")
+                fixedName.push("longchanchan");
+            else
+                fixedName.push(name.replace(/\s/g, ''));
+        });
+        return fixedName;
+    }
+
     function bestMeal(dishes, tastes){
-   
+        
+        // gratin, fried rice, tonk, ramen, sushi, sashimi combo, special stew, kaiseki dinner
+        //sid, fitcher, vincent, lowen
         let tasteValues = filterDishes(dishes, tastes);
         let max = 0;
         let max_i;
