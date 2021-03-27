@@ -113,7 +113,7 @@ fetch('https://suikoden-2-cook-off-calculator.s3.us-east-2.amazonaws.com/json/di
     }
 
     function findBestDishes(event) { 
-        event.preventDefault(); // needed to prevent page submitting 
+        event.preventDefault();
         const tastes = getTastes(selectedCharacters, data.Characters);
         const dishes = getDishes(data, selectedRecipes);
         
@@ -122,20 +122,26 @@ fetch('https://suikoden-2-cook-off-calculator.s3.us-east-2.amazonaws.com/json/di
         const app = (bestMeal(filterByType(dishFiltered, "Appetizer").concat(filterByType(dishFiltered, "Surprise")), tastes));
         const main = bestMeal(filterByType(dishFiltered, "Main").concat(filterByType(dishFiltered, "Surprise")), tastes);
         const dessert = bestMeal(filterByType(dishFiltered, "Dessert").concat(filterByType(dishFiltered, "Surprise")), tastes);
-
+    
         const meal = document.getElementById("meals");
-        const appText = document.createElement("h2");
-        appText.append(document.createTextNode(`Appetizer: ${app.Dish} = ${getDishRecipe(app)} + ${app.Spice}`));
-        const mainText = document.createElement("h2");
-        mainText.append(document.createTextNode(`Main Course: ${main.Dish} = ${getDishRecipe(main)} + ${main.Spice}`));
-        const dessertText = document.createElement("h2");
-        dessertText.append(document.createTextNode(`Dessert: ${dessert.Dish} = ${getDishRecipe(dessert)} + ${dessert.Spice}`));
-
-        meal.append(appText);
-        meal.append(mainText);
-        meal.append(dessertText);
-
+        const courses = { appetizer: "", maincourse: "", dessert: ""};
+        
+        for(course in courses){
+            let bestDish = course == "appetizer" ? app : course == "main" ? main : dessert;
+            courses[course] = createElementById(course, `${course}: ${bestDish.Dish} = ${getDishRecipe(bestDish)} + ${bestDish.Spice}`);
+            meal.append(courses[course]);
+        }
     } 
+
+    function createElementById(id, content){
+        element = document.getElementById(id);
+        if(element.innerText)
+            element.innerText = "";
+
+        text = document.createTextNode(content)
+        element.append(text);
+        return element;
+    }
 
     function getDishes(data, selectedRecipes){
         let dishes = [];
