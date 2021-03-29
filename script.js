@@ -127,7 +127,8 @@ fetch('https://suikoden-2-cook-off-calculator.s3.us-east-2.amazonaws.com/json/di
         const courses = { appetizer: "", maincourse: "", dessert: ""};
         
         for(course in courses){
-            let bestDish = course == "appetizer" ? app : course == "main" ? main : dessert;
+            let bestDish = course == "appetizer" ? app : course == "maincourse" ? main : dessert;
+            console.log(course);
             courses[course] = createElementById(course, `${course}: ${bestDish.Dish} = ${getDishRecipe(bestDish)} + ${bestDish.Spice}`);
             meal.append(courses[course]);
         }
